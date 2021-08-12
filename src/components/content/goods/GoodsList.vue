@@ -23,7 +23,7 @@ props: {
 }
 </script>
 
-<style scoped>
+<style>
  .goods {
     display: flex;
     flex-wrap: wrap;
