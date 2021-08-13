@@ -1,14 +1,21 @@
-import {request} from './request'
+import {
+  request
+} from './request'
 
 export function getDetail(iid) {
-    return request({
-      url: '/detail',
-      params: {
-        iid
-      }
-    });
+  return request({
+    url: '/detail',
+    params: {
+      iid
+    }
+  });
 }
 
+export function getRecommend() {
+  return request({
+    url: '/recommend',
+  })
+}
 
 export class Goods {
   constructor(itemInfo, columns, services) {
@@ -17,6 +24,7 @@ export class Goods {
     this.newPrice = itemInfo.price;
     this.oldPrice = itemInfo.oldPrice;
     this.discount = itemInfo.discountDesc;
+   this.discountBgColor = itemInfo.discountBgColor
     this.columns = columns;
     this.services = services;
     this.realPrice = itemInfo.lowNowPrice;
@@ -24,7 +32,7 @@ export class Goods {
 }
 
 export class Shop {
-  constructor(shopInfo){
+  constructor(shopInfo) {
     this.logo = shopInfo.shopLogo;
     this.name = shopInfo.name;
     this.fans = shopInfo.cFans;
@@ -42,6 +50,3 @@ export class GoodsParam {
     this.sizes = rule.tables;
   }
 }
-
-
-

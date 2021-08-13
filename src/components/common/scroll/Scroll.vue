@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       scroll: null,
-      message: "哈哈哈"
     };
   },
   mounted() {
@@ -34,8 +33,8 @@ export default {
       pullUpLoad: this.pullUpLoad,
 
       mouseWheel: true,
-      observeDOM: true,
-      observeImage: true //在better-scroll@2.1.0得图片刷新加载显示区域延迟到解决
+      // observeDOM: true,
+      // observeImage: true //在better-scroll@2.1.0得图片刷新加载显示区域延迟到解决
       // 官方解释: $refs 只会在组件渲染完成之后生效，并且它们不是响应式的。这仅作为一个用于直接操作子组件的“逃生舱”——你应该避免在模板或计算属性中访问 $refs
       // observeImage: {debounceTime: 300},
     });

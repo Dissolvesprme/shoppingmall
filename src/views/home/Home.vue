@@ -1,11 +1,13 @@
 <template>
   <div id="home" class="wrapper">
+<!-- 首页顶部导航栏 -->
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+ <!-- 狸猫换太子，实现吸附效果 -->
      <tab-control :titles="['流行', '新款', '精选']"
                   @tabClick="tabClick"
                   ref="tabControl1"
                   class="tabControl" v-show="isTabFixed"/>
-       
+<!-- Scroll添加滚动 -->
     <scroll
       class="content"
       ref="scroll"
@@ -13,22 +15,23 @@
       @scroll="contentScroll"
       :pull-up-load="true"
       @pullingUp="loadMore">
-  
+<!-- 轮播图 -->
       <home-swiper :banners="banners" 
        @swiperImageLoad="swiperImageLoad" />
-       
+<!-- 推荐组件 -->
       <recommend-view :recommends="recommends" />
+<!-- 本周流行 -->
       <feature-view />
+<!-- 分类导航栏 -->
       <tab-control
        :titles="['流行', '新款', '精选']"
         @tabClick="tabClick"
         ref="tabControl2"/>
-       
+<!-- 商品展示 -->
       <goods-list :goods="showGoods" />
     </scroll>
-    <div>呵呵呵呵</div>
+<!-- 回到顶部按钮 -->
     <back-top @click.native="backClick" v-show="isShowBackTop" />
-    <div></div>
   </div>
 </template>
 
@@ -41,10 +44,11 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backTop/BackTop";
+
 
 import { getHomeMultidata, getHomeGoods } from "network/home";
-import { debounce } from "common/utils";
+import { itemListenerMixin ,backTopMixin} from "common/mixin";
+
 export default {
   name: "Home",
   components: {
@@ -55,11 +59,12 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    
   },
+  mixins: [itemListenerMixin,backTopMixin],
   data() {
     return {
-      result: null,
+      // result: null,
       banners: [],
       recommends: [],
       goods: {
@@ -68,9 +73,10 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShowBackTop: false,
       tabOffsetTop: 0,
+      saveY: 0,
       isTabFixed: false,
+      
     };
   },
   computed: {
@@ -79,17 +85,17 @@ export default {
     }
   },
   destroyed() {
-    console.log('home destroyed');
+    // console.log('home destroyed');
   },
   activated() {
    this.$refs.scroll.scrollTo(0,this.saveY, 0)
-
    this.$refs.scroll.refresh()
   },
   deactivated() {
-    
+    // 保存Y值
     this.saveY =  this.$refs.scroll.getScollY()
-    console.log(this.saveY);
+    // console.log(this.saveY);
+     this.$bus.$off('itemImgLoad', this.itemImgListener )
   },
   created() {
     // 1.请求多个数据
@@ -101,19 +107,18 @@ export default {
     this.getHomeGoods("sell");
 
   },
-  mounted() {
+  mounted() {},
     //1.图片加载完成的事件监听
-    const refresh = debounce(this.$refs.scroll.refresh, 50)
-    this.$bus.$on("itemImageLoad", () => {
-      //    console.log("----");
-      refresh()
-      // this.$refs.scroll.refresh();
-    });
-
+    // let refresh = debounce(this.$refs.scroll.refresh, 50)
+    // this.itemImgListener =  () => {
+    //   refresh()
+    // }
+    // this.$bus.$on("itemImageLoad", this.itemImgListener)  //    console.log("----");
+      // this.$refs.scroll.refresh();  
+ 
     // 2.获取tabControl的offsetop
       //  this.tabOffsetTop = this.$$refs.tabControl 
       // console.log(this.$refs.tabControl.$el.offsetTop);
-  },
   methods: {
     /**
      * 事件监听方法
@@ -133,9 +138,6 @@ export default {
 
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
-    },
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0);
     },
     contentScroll(position) {
       // 1.判断BackTop是否显示
