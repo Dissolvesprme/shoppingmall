@@ -5,8 +5,8 @@
       class="content"
       ref="scroll"
       :probe-type="3"
-      @scroll="contentScroll">
-     
+      @scroll="contentScroll"
+    >
       <detail-swiper :top-images="topImages" />
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shop" />
@@ -18,6 +18,7 @@
     <detail-bottom-bar @addCart="addToCart" />
 
     <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <!-- <toast :message="message" :show="show" /> -->
   </div>
 </template>
 
@@ -33,6 +34,9 @@ import DetailBottomBar from "./childComps/DetailBottomBar";
 
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from "components/content/goods/GoodsList";
+// import Toast from "components/common/toast/Toast";
+
+import { mapActions } from "vuex";
 
 import {
   getDetail,
@@ -56,7 +60,8 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     Scroll,
-    GoodsList
+    GoodsList,
+    // Toast
   },
   mixins: [itemListenerMixin, backTopMixin],
   data() {
@@ -71,7 +76,9 @@ export default {
       recommends: [],
       themeTopYs: [],
       getThemeTopY: null,
-      currentIndex: 0
+      currentIndex: 0,
+      // message: "",
+      // show: false
     };
   },
   created() {
@@ -128,6 +135,7 @@ export default {
     }, 100);
   },
   methods: {
+    ...mapActions(["addCart"]),
     imageLoad() {
       this.$refs.scroll.refresh();
       this.getThemeTopY();
@@ -182,8 +190,22 @@ export default {
       //   // 2.将商品加入购物车
       // this.$store.cartList.push(product)
       // this.$store.commit("addCart", product);
+      this.addCart(product).then(res => {
+        // this.show = true;
+        // this.message = res;
+        // setTimeout(() => {
+        //   this.show = true;
+        //   this.message = '';
+        // }, 1500);
+        // console.log(res);
+        console.log(this.$toast);
+        this.$toast.show()
+      });
+      // this.$store.dispatch('addCart',product).then(res => {
+      //   console.log(res);
+      // })
 
-      this.$store.dispatch('addCart',product)
+      // 3.添加购物车成功
     }
   }
 };
