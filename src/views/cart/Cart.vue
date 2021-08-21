@@ -37,7 +37,9 @@ export default {
 </script>
 
 <style scoped>
+
 .nav-bar {
+  
   background-color: var(--color-tint);
   color: white;
   font-weight: 700;

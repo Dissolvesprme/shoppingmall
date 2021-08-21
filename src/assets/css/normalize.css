@@ -11,6 +11,7 @@
 html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
+  touch-action: none;  /* 防止双击报错 */
 }
 
 /* Sections
