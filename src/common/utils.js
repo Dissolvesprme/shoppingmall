@@ -12,7 +12,9 @@ export function debounce(func, delay) {
   }
 }
 
-// 时间戳转化
+
+
+// 封装格式化时间正则函数  (时间, '格式化') 
 export function formatDate(date, fmt) {
   // 获取年份
   // 2021
@@ -36,6 +38,7 @@ export function formatDate(date, fmt) {
   return fmt;
 }
 
+// 如果传过来是个单数,前面加个0
 function padLeftZero (str) {
   return ('00' + str).substr(str.length);
 }
